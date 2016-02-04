@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html ng-app="RescueRangersApp">
+<head>
+	<title>Control Panel - Rescue Rangers</title>
+
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="app.js"></script>
+
+</head>
+<body ng-controller="ControlPanelCtrl">
+	<div id="title">
+		<h1>Rescue Rangers Control Panel</h1>
+	</div>
+	<h2>Required Information</h2>
+
+	<div id="requiredInformation" class="col-xs-12">
+		<!-- Injury Type -->
+		<div id="InjuryType" class="col-sm-12 col-md-3">
+		<label>Injury Type:</label><br>
+		<select ng-model="InjuryType">
+		  <option ng-repeat="InjuryType in InjuryTypes" value="{{InjuryType}}">{{InjuryType}}</option>
+		</select>
+		</div>
+
+		<!-- Incident Type -->
+		<div id="IncidentType" class="col-sm-12 col-md-3">
+		<label>Incident Type:</label><br>
+		<select ng-model="IncidentType">
+		  <option ng-repeat="IncidentType in IncidentTypes" value="{{IncidentType}}">{{IncidentType}}</option>
+		</select>
+		</div>
+
+		<!-- Location -->
+		<div id="Location" class="col-sm-12 col-md-3">
+			<label>Location Name:</label><br>
+			<input type="text" ng-model="LocationName"><br>
+			<label>Latitude: </label><br>
+			<input type="text" ng-model="Latitude"><br>
+			<label>Longitude:</label><br>
+			<input type="text" ng-model="Longitude"><br>
+		</div>
+
+
+		<!-- Person Name and Person -->
+		<div id="Person" class="col-sm-12 col-md-3">
+			First Name: <input type="text" ng-model="PersonFirstName">
+			Last Name: <input type="text" ng-model="PersonLastName">
+		</div>
+	</div>
+
+
+	<h2>Optional Information</h2>
+	<div id="optionalInformation" class="col-xs-12" >
+		<!-- Address -->
+		<div id="Address">
+			Street Name: <input type="text" ng-model="StreetName">
+			City: <input type="text" ng-model="City">
+			State: <input type="text" ng-model="State">
+			Country: <input type="text" ng-model="Country">
+		</div>
+
+	</div>
+
+	<a class="center" ng-click="submitForm()" id="submitButton"><i class="fa fa-paper-plane"></i>Submit Form</a>
+
+</body>
+</html>

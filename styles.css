@@ -1,0 +1,62 @@
+
+html, body, #requiredInformation {
+	width: 100vw;
+	height: 100vh;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+}
+
+
+input {
+	margin: 10px;
+}
+
+h2 {
+	text-align: left;
+}
+
+#title {
+	border-bottom: 5px solid #111;
+}
+
+
+#requiredInformation {
+	height: 50%;
+	border-top: 2px solid #111;
+	border-bottom: 2px solid #111;
+
+}
+
+#InjuryType, #IncidentType, #Location, #Person {
+	height: 100%;
+	padding-top: 20px;
+}
+
+#InjuryType, #IncidentType, #Location {
+	border-right:2px solid black;
+}
+
+
+#submitButton {
+	padding: 15px 20px;
+	background-color: steelblue;
+	color: white;
+	border-radius: 7px;
+	text-decoration: none;
+	position: relative;
+	top: 50px;
+}
+
+#submitButton i {
+	margin-right: 8px;
+}
+
+#submitButton:hover {
+	background-color: #7a316b;
+	cursor: pointer;
+}
+
