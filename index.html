@@ -17,39 +17,74 @@
 		<h1>Rescue Rangers Control Panel</h1>
 	</div>
 	<h2>Required Information</h2>
-
+	<div class="col-xs-12">
+		<div class="col-xs-6">
+			<label>Incident Name</label>
+			<input type="text" class="form-control" ng-model="incident.IncidentName">
+		</div>
+		<div class="col-xs-6">
+			<label>Incident Description</label>
+			<input type="text" class="form-control" ng-model="incident.IncidentDesc">
+		</div>
+	</div>
 	<div id="requiredInformation" class="col-xs-12">
-		<!-- Injury Type -->
-		<div id="InjuryType" class="col-sm-12 col-md-3">
-		<label>Injury Type:</label><br>
-		<select ng-model="InjuryType">
-		  <option ng-repeat="InjuryType in InjuryTypes" value="{{InjuryType}}">{{InjuryType}}</option>
-		</select>
+		<div class="col-xs-6">
+			<!-- Incident Type -->
+			<div id="IncidentType" class="col-sm-12 col-md-4">
+				{{incident.IncidentType}}
+				<label>Incident Type:</label><br>
+				<select ng-model="incident.IncidentType">
+				  <option ng-repeat="(key, value) in IncidentTypes" value="{{key}}">{{value}}</option>
+				</select>
+			</div>
+
+			<!-- Kit Type -->
+			<div id="KitName" class="col-sm-12 col-md-4">
+				<label>Kit Name:</label><br>
+				<select ng-model="incident.KitName">
+				  <option ng-repeat="KitName in KitNames" value="{{KitName}}">{{KitName}}</option>
+				</select>
+			</div>
+
+			<!-- Severity Type -->
+			<div id="SeverityName" class="col-sm-12 col-md-4">
+				<label>Severity Name:</label><br>
+				<select ng-model="incident.SeverityName">
+				  <option ng-repeat="SeverityName in SeverityNames" value="{{SeverityName}}">{{SeverityName}}</option>
+				</select>
+			</div>
 		</div>
 
-		<!-- Incident Type -->
-		<div id="IncidentType" class="col-sm-12 col-md-3">
-		<label>Incident Type:</label><br>
-		<select ng-model="IncidentType">
-		  <option ng-repeat="IncidentType in IncidentTypes" value="{{IncidentType}}">{{IncidentType}}</option>
-		</select>
-		</div>
 
 		<!-- Location -->
 		<div id="Location" class="col-sm-12 col-md-3">
 			<label>Location Name:</label><br>
-			<input type="text" ng-model="LocationName"><br>
+			<input type="text" ng-model="incident.LocationName"><br>
 			<label>Latitude: </label><br>
-			<input type="text" ng-model="Latitude"><br>
+			<input type="text" ng-model="incident.Latitude"><br>
 			<label>Longitude:</label><br>
-			<input type="text" ng-model="Longitude"><br>
+			<input type="text" ng-model="incident.Longitude"><br>
 		</div>
 
 
 		<!-- Person Name and Person -->
 		<div id="Person" class="col-sm-12 col-md-3">
-			First Name: <input type="text" ng-model="PersonFirstName">
-			Last Name: <input type="text" ng-model="PersonLastName">
+			<div class="col-xs-12">
+				First Name: <input type="text" ng-model="incident.PersonFirstName"><br>
+				Last Name: <input type="text" ng-model="incident.PersonLastName">
+			</div>
+			<!-- Injury Type -->
+
+			<div class="col-sm-12">
+				Injury Name: <input type="text" ng-model="incident.InjuryName"><br>
+				Injury Description: <input type="text" ng-model="incident.InjuryDesc">
+			</div>
+			<div id="InjuryType" class="col-sm-12">
+				<label>Injury Type:</label><br>
+				<select ng-model="incident.InjuryType">
+				  <option ng-repeat="InjuryType in InjuryTypes" value="{{InjuryType}}">{{InjuryType}}</option>
+				</select>
+			</div>
 		</div>
 	</div>
 
@@ -58,10 +93,10 @@
 	<div id="optionalInformation" class="col-xs-12" >
 		<!-- Address -->
 		<div id="Address">
-			Street Name: <input type="text" ng-model="StreetName">
-			City: <input type="text" ng-model="City">
-			State: <input type="text" ng-model="State">
-			Country: <input type="text" ng-model="Country">
+			Street Name: <input type="text" ng-model="incident.StreetName">
+			City: <input type="text" ng-model="incident.City">
+			State: <input type="text" ng-model="incident.State">
+			Country: <input type="text" ng-model="incident.Country">
 		</div>
 
 	</div>

@@ -8,7 +8,8 @@ function db_connect (){
         $username = 'info445';
         $pw = 'GoHuskies!';
         $dbh = new PDO ("dblib:host=$hostname:$port;dbname=$dbname","$username","$pw");
-        $dbh->setAttribute(PDO :: ATTR_DEFAULT_FETCH_MODE, PDO :: FETCH_ASSOC);
+        $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC, PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,
+        PDO::ATTR_PERSISTENT);
 
         return ($dbh);
 

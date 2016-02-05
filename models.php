@@ -19,7 +19,16 @@
 
 
     try {
-        $toCall = $_GET['f'];
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST))
+            $_POST = json_decode(file_get_contents('php://input'), true);
+        // $body = json_decode($_POST);
+        // $body = print_r($_POST, true);
+        // echo "<pre>";
+        // echo $body;
+        // echo "</pre>";
+
+        // exit;
+        $toCall = $_POST['target'];
         switch ($toCall) {
             case 'startIncident':
                 startIncident();
@@ -68,6 +77,7 @@
     function startIncident() {
         global $dbq;
 
+
         $data = [
             'IncidentName' => $_POST['IncidentName'],
             'IncidentDesc' => $_POST['IncidentDesc'],
@@ -80,68 +90,98 @@
             'InjuryDesc' => $_POST['InjuryDesc'],
             'InjuryTypeName' => $_POST['InjuryType'],
             'LocationName' => $_POST['LocationName'],
-            'LocationLat' => $_POST['Latitude'],
-            'LocationLng' => $_POST['Longitude'],
-            'StreetName' => $_POST['StreetName'],
-            'City' => $_POST['City'],
-            'State' => $_POST['State'],
-            'Country' => $_POST['Country']
+            'LocationLat' =>  isset($_POST['Latitude']) ? $_POST['Latitude'] : NULL,
+            'LocationLng' =>  isset($_POST['Longitude']) ? $_POST['Longitude'] : NULL,
+            'StreetName' => isset($_POST['StreetName']) ? $_POST['StreetName'] : NULL,
+            'City' =>  isset($_POST['City']) ? $_POST['City'] : NULL,
+            'State' => isset($_POST['State']) ? $_POST['State'] : NULL,
+            'Country' => isset($_POST['Country']) ? $_POST['Country'] : NULL
         ];
 
-        $sth = $dbh->prepare("exec startIncident
-                                            @IncidentName=:IncidentName
-                                            @IncidentDesc=:IncidentDesc
-                                            @IncidentTypeName=:IncidentTypeName
-                                            @KitName=:KitName
-                                            @FirstName =:FirstName
-                                            @LastName =:LastName
-                                            @SeverityName =:SeverityName
-                                            @InjuryName =:InjuryName
-                                            @InjuryDesc =:InjuryDesc
-                                            @InjuryTypeName =:InjuryTypeName
-                                            @LocationName =:LocationName
-                                            @LocationLat =:LocationLat
-                                            @LocationLng =:LocationLng
-                                            @StreetName =:StreetName
-                                            @City =:City
-                                            @State =:State
-                                            @Country =:Country");
-        $sth->bindParam(':IncidentName', $data['IncidentName']);
-        $sth->bindParam(':IncidentDesc', $data['IncidentDesc']);
-        $sth->bindParam(':IncidentTypeName', $data['IncidentTypeName']);
+        try {
+            $IncidentTypeID = $dbq->query("SELECT IncidentTypeID FROM INCIDENT_TYPE i WHERE i.IncidentTypeName = '$data[IncidentTypeName]'");
+            $IncidentTypeID = intval($IncidentTypeID->fetchColumn());
 
-        $sth->bindParam(':KitName', $data['KitName']);
-        $sth->bindParam(':FirstName', $data['FirstName']);
-        $sth->bindParam(':LastName', $data['LastName']);
+            $PersonTypeID = $dbq->query("SELECT PersonTypeID FROM PERSON_TYPE pt WHERE pt.PersonTypeName = 'Client'");
+            $PersonTypeID = intval($PersonTypeID->fetchColumn());
 
-        $sth->bindParam(':SeverityName', $data['SeverityName']);
+            $KitID = $dbq->query("SELECT KitID FROM KIT k WHERE k.KitName = '$data[KitName]'");
+            $KitID = intval($KitID->fetchColumn());
 
-        $sth->bindParam(':InjuryName', $data['InjuryName']);
-        $sth->bindParam(':InjuryDesc', $data['InjuryDesc']);
-        $sth->bindParam(':InjuryTypeName', $data['InjuryTypeName']);
+            $SeverityID = $dbq->query("SELECT SeverityID FROM SEVERITY WHERE SeverityName = '$data[SeverityName]'");
+            $SeverityID = intval($SeverityID->fetchColumn());
 
-        $sth->bindParam(':LocationName', $data['LocationName']);
-        $sth->bindParam(':LocationLat', $data['LocationLat']);
-        $sth->bindParam(':LocationLng', $data['LocationLng']);
+            $InjuryTypeID = $dbq->query("SELECT InjuryTypeID FROM INJURY_TYPE it WHERE it.InjuryTypeName = '$data[InjuryTypeName]'");
+            $InjuryTypeID = intval($InjuryTypeID->fetchColumn());
 
-        $sth->bindParam(':StreetName', $data['StreetName']);
-        $sth->bindParam(':City', $data['City']);
-        $sth->bindParam(':State', $data['State']);
-        $sth->bindParam(':Country', $data['Country']);
 
-        $sth->execute();
+            $LocationID = $dbq->query("INSERT INTO LOCATION (LocationName, LocationLat, LocationLng)
+            VALUES ('$data[LocationName]', $data[LocationLat], $data[LocationLng])");
+            $LocationID = $dbq->query("SELECT IDENT_CURRENT('LOCATION')");
+            $LocationID = intval($LocationID->fetchColumn());
+
+            $IncidentID = $dbq->query("INSERT INTO INCIDENT(IncidentName, IncidentDesc, IncidentTypeID, KitID, LocationID)
+            VALUES('$data[IncidentName]', '$data[IncidentDesc]', $IncidentTypeID, $KitID, $LocationID)");
+            $IncidentID = $dbq->query("SELECT IDENT_CURRENT('INCIDENT')");
+            $IncidentID = intval($IncidentID->fetchColumn());
+
+            $PersonID = $dbq->query("INSERT INTO PERSON (PersonFName, PersonLName, PersonTypeID)
+            VALUES ('$data[FirstName]', '$data[LastName]', $PersonTypeID)");
+            $PersonID = $dbq->query("SELECT IDENT_CURRENT('PERSON')");
+            $PersonID = intval($PersonID->fetchColumn());
+
+
+            $dbq->query("INSERT INTO PERSON_INCIDENT (PersonID, IncidentID)
+            VALUES ($PersonID, $IncidentID)");
+
+            $dbq->query("INSERT INTO INJURY (InjuryName, InjuryDesc, InjuryTypeID)
+            VALUES ('$data[InjuryName]', '$data[InjuryDesc]', $InjuryTypeID)");
+            $InjuryID = $dbq->query("SELECT IDENT_CURRENT('INJURY')");
+            $InjuryID = intval($InjuryID->fetchColumn());
+
+
+            $dbq->query("INSERT INTO PERSON_INJURY (PersonID, InjuryID, SeverityID)
+            VALUES ($PersonID, $InjuryID, $SeverityID)");
+
+            if ($data['StreetName'] !== NULL && $data['City'] !== NULL && $data['State'] !== NULL && $data['Country'] !== NULL) {
+                $CountryID = $dbq->query("SELECT CountryID FROM COUNTRY WHERE COUNTRY.CountryName = '$data[Country]'");
+                $CountryID = intval($CountryID->fetchColumn());
+
+                $AddressID = $dbq->query("INSERT INTO ADDRESS (StreetName, City, [State], CountryID)
+                                                                VALUES ('$data[StreetName]', '$data[City]', '$data[State]', $CountryID)");
+                $AddressID = $dbq->query("SELECT IDENT_CURRENT('ADDRESS')");
+                $AddressID = intval($AddressID->fetchColumn());
+
+
+                $dbq->query("INSERT INTO PERSON_ADDRESS (PersonID, AddressID)
+                    VALUES ($PersonID, $AddressID)");
+            }
+
+
+
+        } catch (PDOException $e) {
+             print ("getMessage(): " . $e->getMessage () . "\n");
+        }
     }
 
     function addIncident ($IncidentName, $IncidentDesc, $KitName, $LocationLat, $IncidentTypeName) {
         global $dbq;
-        $sth = $dbh->prepare("exec popIncident @IncidentName=:IncidentName @IncidentDesc=:IncidentDesc @IncidentDateCreated=:IncidentDateCreated @KitName=:KitName @LocationLat=:locationLat @IncidentTypeName=:IncidentTypeName");
-        $sth->bindParam(':IncidentName', $IncidentName);
-        $sth->bindParam(':IncidentDesc', $IncidentDesc);
-        $sth->bindParam(':IncidentDateCreated', date("Y-m-d H:m:s"));
-        $sth->bindParam(':KitName', $KitName);
-        $sth->bindParam(':LocationLat', $LocationLat);
-        $sth->bindParam(':IncidentTypeName', $IncidentTypeName);
-        $sth->execute();
+        // $sth = $dbq->prepare("{ RRTest2.dbo.popIncident = CALL
+        //                                     ?
+        //                                     ?
+        //                                     ?
+        //                                     ?
+        //                                     ?
+        //                                     ? }");
+        // $sth->bindParam(1, $IncidentDesc, PDO::PARAM_STR);
+        // $sth->bindParam(2, $IncidentName, PDO::PARAM_STR);
+        // $sth->bindParam(3, date("Y-m-d H:m:s"), PDO::PARAM_STR);
+        // $sth->bindParam(4, $KitName, PDO::PARAM_STR);
+        // $sth->bindParam(5, $LocationLat, PDO::PARAM_STR);
+        // $sth->bindParam(6, $IncidentTypeName, PDO::PARAM_STR);
+        // $sth->execute();
+        $sql = "INSERT INTO INCIDENT (IncidentName, IncidentDesc, IncidentTypeID, KitID, LocationID) VALUES ('Test Incident', 'Test Desc', 1, 1, 1518)";
+        $sth = $dbq->query($sql);
     }
 
     function getIncidents () {
