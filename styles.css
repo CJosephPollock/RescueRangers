@@ -8,6 +8,7 @@ body {
 	margin: 0px;
 	padding: 0px;
 	text-align: center;
+	background-image: url("background.png");
 }
 
 
@@ -17,6 +18,21 @@ input {
 
 h2 {
 	text-align: left;
+}
+
+.box{
+	border-top: 2px solid #111;
+	border-bottom: 2px solid #111;
+	
+	
+}
+
+.fill{
+	border-top: 2px solid #111;
+}
+
+.inputForm {
+	margin-bottom: 2em;
 }
 
 #title {

@@ -2,8 +2,9 @@
 <html ng-app="RescueRangersApp">
 <head>
 	<title>Control Panel - Rescue Rangers</title>
-
-
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="styles.css">
@@ -13,11 +14,11 @@
 
 </head>
 <body ng-controller="ControlPanelCtrl">
-	<div id="title">
+	<div id="title" class="col-xs-12 col-md-12 box" >
 		<h1>Rescue Rangers Control Panel</h1>
 	</div>
 	<h2>Required Information</h2>
-	<div class="col-xs-12">
+	<div class="col-xs-12 col-md-12">
 		<div class="col-xs-6">
 			<label>Incident Name</label>
 			<input type="text" class="form-control" ng-model="incident.IncidentName">
@@ -27,10 +28,10 @@
 			<input type="text" class="form-control" ng-model="incident.IncidentDesc">
 		</div>
 	</div>
-	<div id="requiredInformation" class="col-xs-12">
-		<div class="col-xs-6">
+	<div class="row">
+		<div class="col-sm-6 col-md-4 fill">
 			<!-- Incident Type -->
-			<div id="IncidentType" class="col-sm-12 col-md-4">
+			<div id="IncidentType">
 				<label>Incident Type:</label><br>
 				<select ng-model="incident.IncidentType">
 				  <option ng-repeat="(key, value) in IncidentTypes" value="{{key}}">{{value}}</option>
@@ -38,25 +39,25 @@
 			</div>
 
 			<!-- Kit Type -->
-			<div id="KitName" class="col-sm-12 col-md-4">
+			<div id="KitName" >
 				<label>Kit Name:</label><br>
 				<select ng-model="incident.KitName">
-				  <option ng-repeat="KitName in KitNames" value="{{KitName}}">{{KitName}}</option>
+				 <option ng-repeat="KitName in KitNames" value="{{KitName}}">{{KitName}}</option>
 				</select>
 			</div>
 
 			<!-- Severity Type -->
-			<div id="SeverityName" class="col-sm-12 col-md-4">
+			<div id="SeverityName" class="inputForm">
 				<label>Severity Name:</label><br>
 				<select ng-model="incident.SeverityName">
-				  <option ng-repeat="SeverityName in SeverityNames" value="{{SeverityName}}">{{SeverityName}}</option>
+				<option ng-repeat="SeverityName in SeverityNames" value="{{SeverityName}}">{{SeverityName}}</option>
 				</select>
 			</div>
 		</div>
 
 
 		<!-- Location -->
-		<div id="Location" class="col-sm-12 col-md-3">
+		<div id="Location" class="col-sm-6 col-md-4 fill">
 			<label>Location Name:</label><br>
 			<input type="text" ng-model="incident.LocationName"><br>
 			<label>Latitude: </label><br>
@@ -67,18 +68,23 @@
 
 
 		<!-- Person Name and Person -->
-		<div id="Person" class="col-sm-12 col-md-3">
-			<div class="col-xs-12">
-				First Name: <input type="text" ng-model="incident.PersonFirstName"><br>
-				Last Name: <input type="text" ng-model="incident.PersonLastName">
+		<div id="Person" class="col-sm-12 col-md-4 fill">
+			<div>
+				<label>First Name:</label><br>
+				<input type="text" ng-model="incident.PersonFirstName"><br>
+				<label>Last Name:</label><br>
+				<input type="text" ng-model="incident.PersonLastName"><br>
 			</div>
 			<!-- Injury Type -->
 
-			<div class="col-sm-12">
-				Injury Name: <input type="text" ng-model="incident.InjuryName"><br>
-				Injury Description: <input type="text" ng-model="incident.InjuryDesc">
+			<div>
+				<label>Injury Name:</label><br>
+				<input type="text" ng-model="incident.InjuryName"><br>
+				<label>Injury Description:</label><br>
+				<input type="text" ng-model="incident.InjuryDesc"><br>
+				
 			</div>
-			<div id="InjuryType" class="col-sm-12">
+			<div id="InjuryType" class="inputForm">
 				<label>Injury Type:</label><br>
 				<select ng-model="incident.InjuryType">
 				  <option ng-repeat="InjuryType in InjuryTypes" value="{{InjuryType}}">{{InjuryType}}</option>
@@ -86,21 +92,21 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-sm-12 col-md-12 box"
 
-
-	<h2>Optional Information</h2>
-	<div id="optionalInformation" class="col-xs-12" >
+	<h1>Optional Information</h1>
+	</div>
+	<div id="optionalInformation" class="col-md-12 col-sm-12" >
 		<!-- Address -->
 		<div id="Address">
-			Street Name: <input type="text" ng-model="incident.StreetName">
-			City: <input type="text" ng-model="incident.City">
-			State: <input type="text" ng-model="incident.State">
-			Country: <input type="text" ng-model="incident.Country">
+			<label>City</label><br><input type="text" ng-model="incident.City"><br>
+			<label>State</label><br><input type="text" ng-model="incident.State"><br>
+			<label>Country</label><br><input type="text" ng-model="incident.Country"><br>
 		</div>
 
 	</div>
-
+	<div class="col-md-12 col-sm-12">
 	<a class="center" ng-click="submitForm()" id="submitButton"><i class="fa fa-paper-plane"></i>Submit Form</a>
-
+	</div>
 </body>
 </html>
